@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package poc;
 
-option go_package = "github.com/kchojn/poc-shared-publisher/internal/proto";
+option go_package = "github.com/ssv-labs/poc-shared-publisher/internal/proto";
 
 // Cross-chain transaction request
 message XTRequest {
@@ -11,45 +11,13 @@ message XTRequest {
 
 message TransactionRequest {
   bytes chain_id = 1;
-  repeated bytes transaction = 2;
+  repeated bytes transaction = 2; // RLP encoded Ethereum transactions
 }
 
-// CIRC message
-message CIRCMessage {
-  bytes source_chain = 1;
-  bytes destination_chain = 2;
-  repeated bytes source = 3;
-  repeated bytes receiver = 4;
-  uint32 session_id = 5;
-  string label = 6;
-  repeated bytes data = 7;
-}
-
-// 2PC messages
-message Vote {
-  bytes sender_chain = 1;
-  uint64 xt_id = 2;
-  bool vote = 3;
-}
-
-message Decided {
-  uint64 xt_id = 1;
-  bool decision = 2;
-}
-
-// Block
-message Block {
-  repeated bytes block = 1;
-  repeated uint64 included_xts = 2;
-}
-
-// Wrapper message
+// Wrapper for all messages
 message Message {
+  string sender_id = 1; // Identifier of the sender
   oneof payload {
-    XTRequest xt_request = 1;
-    CIRCMessage circ_message = 2;
-    Vote vote = 3;
-    Decided decided = 4;
-    Block block = 5;
+    XTRequest xt_request = 2;
   }
 }

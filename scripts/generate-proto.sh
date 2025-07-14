@@ -3,7 +3,7 @@
 set -e
 
 PROTO_DIR="api/proto"
-OUT_DIR="internal/types"
+OUT_DIR="internal/proto"
 
 # Install protoc-gen-go if not present
 if ! command -v protoc-gen-go &> /dev/null; then
