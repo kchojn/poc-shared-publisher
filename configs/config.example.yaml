@@ -27,19 +27,6 @@ metrics:
   # Metrics path
   path: /metrics
 
-# Sequencers that will connect to this publisher
-# At least 2 sequencers are required for cross-chain functionality
-sequencers:
-  # Example sequencer A
-  - chain_id: "0x1234"                    # Unique chain identifier
-    endpoint: "localhost:9001"            # Sequencer endpoint (for future use)
-    name: "Example Rollup A"              # Human-readable name
-
-  # Example sequencer B
-  - chain_id: "0x5678"
-    endpoint: "localhost:9002"
-    name: "Example Rollup B"
-
 # Logging configuration
 log:
   # Log level: trace, debug, info, warn, error, fatal, panic

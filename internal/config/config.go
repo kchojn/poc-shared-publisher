@@ -8,10 +8,9 @@ import (
 )
 
 type Config struct {
-	Server     ServerConfig      `mapstructure:"server"`
-	Metrics    MetricsConfig     `mapstructure:"metrics"`
-	Sequencers []SequencerConfig `mapstructure:"sequencers"`
-	Log        LogConfig         `mapstructure:"log"`
+	Server  ServerConfig  `mapstructure:"server"`
+	Metrics MetricsConfig `mapstructure:"metrics"`
+	Log     LogConfig     `mapstructure:"log"`
 }
 
 type ServerConfig struct {
@@ -26,12 +25,6 @@ type MetricsConfig struct {
 	Enabled bool   `mapstructure:"enabled"`
 	Port    int    `mapstructure:"port"`
 	Path    string `mapstructure:"path"`
-}
-
-type SequencerConfig struct {
-	ChainID  string `mapstructure:"chain_id"`
-	Endpoint string `mapstructure:"endpoint"`
-	Name     string `mapstructure:"name"`
 }
 
 type LogConfig struct {
@@ -85,18 +78,6 @@ func (c *Config) Validate() error {
 
 	if c.Metrics.Enabled && c.Metrics.Port <= 0 {
 		return fmt.Errorf("metrics.port must be positive when metrics enabled")
-	}
-
-	if len(c.Sequencers) < 2 {
-		return fmt.Errorf("at least 2 sequencers required for production")
-	}
-
-	chainIDs := make(map[string]bool)
-	for _, seq := range c.Sequencers {
-		if chainIDs[seq.ChainID] {
-			return fmt.Errorf("duplicate chain_id: %s", seq.ChainID)
-		}
-		chainIDs[seq.ChainID] = true
 	}
 
 	return nil

@@ -2,28 +2,14 @@ server:
   listen_addr: ":8080"
   read_timeout: 30s
   write_timeout: 30s
-  max_message_size: 10485760  # 10MB
+  max_message_size: 10485760
   max_connections: 100
 
 metrics:
   enabled: true
   port: 8081
-  path: /metrics
-
-sequencers:
-  - chain_id: "0x1234"
-    endpoint: "sequencer-a.internal:8080"
-    name: "Rollup A"
-
-  - chain_id: "0x5678"
-    endpoint: "sequencer-b.internal:8080"
-    name: "Rollup B"
-
-  - chain_id: "0xABCD"
-    endpoint: "sequencer-c.internal:8080"
-    name: "Rollup C"
 
 log:
-  level: info
-  pretty: false
+  level: debug
+  pretty: true
   output: stdout
