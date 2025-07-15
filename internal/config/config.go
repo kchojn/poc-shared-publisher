@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/spf13/viper"
@@ -14,30 +15,34 @@ type Config struct {
 }
 
 type ServerConfig struct {
-	ListenAddr     string        `mapstructure:"listen_addr"`
-	ReadTimeout    time.Duration `mapstructure:"read_timeout"`
-	WriteTimeout   time.Duration `mapstructure:"write_timeout"`
-	MaxMessageSize int           `mapstructure:"max_message_size"`
-	MaxConnections int           `mapstructure:"max_connections"`
+	ListenAddr     string        `mapstructure:"listen_addr" env:"SERVER_LISTEN_ADDR"`
+	ReadTimeout    time.Duration `mapstructure:"read_timeout" env:"SERVER_READ_TIMEOUT"`
+	WriteTimeout   time.Duration `mapstructure:"write_timeout" env:"SERVER_WRITE_TIMEOUT"`
+	MaxMessageSize int           `mapstructure:"max_message_size" env:"SERVER_MAX_MESSAGE_SIZE"`
+	MaxConnections int           `mapstructure:"max_connections" env:"SERVER_MAX_CONNECTIONS"`
 }
 
 type MetricsConfig struct {
-	Enabled bool   `mapstructure:"enabled"`
-	Port    int    `mapstructure:"port"`
-	Path    string `mapstructure:"path"`
+	Enabled bool   `mapstructure:"enabled" env:"METRICS_ENABLED"`
+	Port    int    `mapstructure:"port" env:"METRICS_PORT"`
+	Path    string `mapstructure:"path" env:"METRICS_PATH"`
 }
 
 type LogConfig struct {
-	Level  string `mapstructure:"level"`
-	Pretty bool   `mapstructure:"pretty"`
-	Output string `mapstructure:"output"` // stdout, stderr, file
-	File   string `mapstructure:"file"`   // log file path if output=file
+	Level  string `mapstructure:"level" env:"LOG_LEVEL"`
+	Pretty bool   `mapstructure:"pretty" env:"LOG_PRETTY"`
+	Output string `mapstructure:"output" env:"LOG_OUTPUT"` // stdout, stderr, file
+	File   string `mapstructure:"file" env:"LOG_FILE"`     // log file path if output=file
 }
 
 func Load(path string) (*Config, error) {
 	viper.SetConfigFile(path)
 	viper.SetConfigType("yaml")
 
+	viper.AutomaticEnv()
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+
+	// Set defaults
 	viper.SetDefault("server.listen_addr", ":8080")
 	viper.SetDefault("server.read_timeout", "30s")
 	viper.SetDefault("server.write_timeout", "30s")

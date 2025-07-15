@@ -3,15 +3,26 @@ global:
   evaluation_interval: 15s
   external_labels:
     monitor: 'poc-shared-publisher'
-    environment: 'development'
+    environment: 'production'
 
 scrape_configs:
   # Shared Publisher metrics
   - job_name: 'shared-publisher'
     static_configs:
-      - targets: ['publisher:8081']
-    metrics_path: /metrics
-    scrape_interval: 15s
+      - targets: ['shared-publisher:8081']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'shared-publisher'
+
+  # Container metrics from cAdvisor
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'cadvisor'
 
   # Prometheus self-monitoring
   - job_name: 'prometheus'

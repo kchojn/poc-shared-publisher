@@ -121,6 +121,35 @@ log:
   output: stdout                # Output to stdout (Loki integration)
 ```
 
+### Environment Variables
+
+All configuration values can be overridden using environment variables:
+
+```bash
+# Server configuration
+export SERVER_LISTEN_ADDR=":9090"
+export SERVER_MAX_CONNECTIONS=200
+export SERVER_READ_TIMEOUT=60s
+
+# Metrics configuration
+export METRICS_PORT=3000
+export METRICS_ENABLED=false
+
+# Logging configuration
+export LOG_LEVEL=debug
+export LOG_PRETTY=true
+```
+
+**Pattern**: `<SECTION>_<KEY>` (dots replaced with underscores, all uppercase)
+
+**Examples**:
+
+- `server.listen_addr` → `SERVER_LISTEN_ADDR`
+- `metrics.port` → `METRICS_PORT`
+- `log.level` → `LOG_LEVEL`
+
+**Priority**: ENV variables > YAML config > Default values
+
 ## Monitoring
 
 ### Metrics

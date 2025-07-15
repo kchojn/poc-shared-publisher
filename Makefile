@@ -1,4 +1,4 @@
-.PHONY: all build clean test coverage lint proto run docker docker-run help
+.PHONY: all build clean test coverage lint proto run docker help
 
 # Variables
 BINARY_NAME=poc-shared-publisher
@@ -40,7 +40,7 @@ docker: ## Build the Docker image
 	docker tag $(DOCKER_IMAGE):$(VERSION) $(DOCKER_IMAGE):latest
 
 docker-run: ## Run the application using docker-compose
-	docker-compose up --build
+	docker-compose -f docker-compose.yml up
 
 help:
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-15s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
