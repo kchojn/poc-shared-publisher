@@ -36,11 +36,11 @@ run: build ## Run the application
 
 docker: ## Build the Docker image
 	@echo "Building Docker image..."
-	docker build -t $(DOCKER_IMAGE):$(VERSION) -f build/Dockerfile .
+	docker build -t $(DOCKER_IMAGE):$(VERSION) -f Dockerfile .
 	docker tag $(DOCKER_IMAGE):$(VERSION) $(DOCKER_IMAGE):latest
 
 docker-run: ## Run the application using docker-compose
-	docker-compose -f build/docker-compose.yml up
+	docker-compose -f docker-compose.yml up
 
 help:
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  %-15s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
