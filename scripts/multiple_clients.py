@@ -25,7 +25,7 @@ class SequencerClient:
         print(f"[{self.client_id}] Connected to {self.host}:{self.port}")
 
     def create_message(self, tx_data):
-        """Create protobuf message (simplified)"""
+        """Create protobuf message"""
         # TransactionRequest
         tx_request = b''
         tx_request += b'\x0a' + bytes([len(self.chain_id)]) + self.chain_id
@@ -86,7 +86,7 @@ class SequencerClient:
         try:
             self.connect()
 
-            # Start receiver thread
+            # Start a receiver thread
             receiver = threading.Thread(target=self.receive_broadcasts)
             receiver.start()
 

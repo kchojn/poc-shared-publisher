@@ -1,15 +1,12 @@
 #!/usr/bin/env python3
 """
-Send cross-chain transaction request to POC Shared Publisher
+Send a cross-chain transaction request to POC Shared Publisher
 """
 import socket
 import struct
 import time
 import sys
 from datetime import datetime
-
-# You need to generate Python protobuf files first:
-# protoc --python_out=. api/proto/messages.proto
 
 def create_xt_request_message(sender_id="python-sequencer", chain_id=b'\x12\x34', transactions=None):
     """
@@ -29,13 +26,11 @@ def create_xt_request_message(sender_id="python-sequencer", chain_id=b'\x12\x34'
     }
     """
     if transactions is None:
-        # Create sample transaction data
         transactions = [
             b'\x01\x02\x03\x04\x05',  # Sample transaction 1
             b'\x06\x07\x08\x09\x0a',  # Sample transaction 2
         ]
 
-    # Manual protobuf encoding (simplified)
 
     # Build TransactionRequest
     tx_request = b''

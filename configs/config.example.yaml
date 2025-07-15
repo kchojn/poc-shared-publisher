@@ -13,8 +13,8 @@ server:
   # Maximum message size in bytes (default: 10MB)
   max_message_size: 10485760
 
-  # Maximum number of concurrent connections
-  max_connections: 100
+  # Maximum number of concurrent connections (
+  max_connections: 10
 
 # Metrics server configuration
 metrics:
@@ -24,9 +24,6 @@ metrics:
   # HTTP port for metrics endpoint
   port: 8081
 
-  # Metrics path
-  path: /metrics
-
 # Logging configuration
 log:
   # Log level: trace, debug, info, warn, error, fatal, panic
@@ -35,8 +32,5 @@ log:
   # Pretty print logs (true for development, false for production)
   pretty: false
 
-  # Output destination: stdout, stderr, file
+  # Output destination: stdout (logs sent to Loki)
   output: stdout
-
-  # Log file path (only used if output=file)
-  # file: /var/log/shared-publisher.log
