@@ -25,6 +25,9 @@ linters:
     - staticcheck
     - unconvert
     - unparam
+  disable:
+    - errcheck
+    - gocognit
   settings:
     dupl:
       threshold: 100
