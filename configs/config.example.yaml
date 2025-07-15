@@ -1,0 +1,55 @@
+# Example configuration file for POC Shared Publisher
+# Copy this file to config.yaml and adjust values as needed
+
+# Server configuration
+server:
+  # TCP listen address for sequencer connections
+  listen_addr: ":8080"
+
+  # Connection timeouts
+  read_timeout: 30s
+  write_timeout: 30s
+
+  # Maximum message size in bytes (default: 10MB)
+  max_message_size: 10485760
+
+  # Maximum number of concurrent connections
+  max_connections: 100
+
+# Metrics server configuration
+metrics:
+  # Enable metrics endpoint
+  enabled: true
+
+  # HTTP port for metrics endpoint
+  port: 8081
+
+  # Metrics path
+  path: /metrics
+
+# Sequencers that will connect to this publisher
+# At least 2 sequencers are required for cross-chain functionality
+sequencers:
+  # Example sequencer A
+  - chain_id: "0x1234"                    # Unique chain identifier
+    endpoint: "localhost:9001"            # Sequencer endpoint (for future use)
+    name: "Example Rollup A"              # Human-readable name
+
+  # Example sequencer B
+  - chain_id: "0x5678"
+    endpoint: "localhost:9002"
+    name: "Example Rollup B"
+
+# Logging configuration
+log:
+  # Log level: trace, debug, info, warn, error, fatal, panic
+  level: info
+
+  # Pretty print logs (true for development, false for production)
+  pretty: false
+
+  # Output destination: stdout, stderr, file
+  output: stdout
+
+  # Log file path (only used if output=file)
+  # file: /var/log/shared-publisher.log
