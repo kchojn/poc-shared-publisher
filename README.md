@@ -216,10 +216,57 @@ make proto
 └── scripts/             # Development and testing scripts
 ```
 
-### Protocol
+## Communication Protocol
 
-The system uses a simple TCP protocol with length-prefixed protobuf messages:
+The publisher and sequencers communicate over a custom TCP-based protocol designed for high performance and low
+overhead. It does **not** use HTTP or gRPC. Clients must implement the following protocol to connect and interact with
+the publisher.
+
+### Protocol Design
+
+The protocol is built on two core concepts:
+
+1. **Persistent TCP Connections**: Clients establish a long-lived TCP connection to the publisher. This avoids the
+   overhead of repeated handshakes (like in HTTP) and is ideal for the frequent, low-latency communication required
+   between sequencers.
+
+2. **Length-Prefixed Message Framing**: TCP is a stream-oriented protocol, meaning it does not have a built-in concept
+   of message boundaries. To solve this, we implement a message framing strategy. Each Protobuf message is prefixed with
+   a 4-byte header that specifies the exact length of the message that follows.
+
+This design ensures that the receiver can reliably read complete messages from the stream without corruption or
+ambiguity.
+
+### Message Format
+
+Every message sent over the TCP socket **must** adhere to the following binary format:
 
 ```
-[4 bytes length][protobuf message]
+[ 4-byte Header | Protobuf Message Payload ]
 ```
+
+* **Header (`[4-byte-length]`)**:
+    * **Size**: 4 bytes (32 bits).
+    * **Content**: An unsigned integer representing the size of the *Protobuf Message Payload* in bytes.
+    * **Encoding**: Big Endian byte order.
+
+* **Protobuf Message Payload**:
+    * **Content**: The binary data resulting from serializing a `Message` struct (defined in `api/proto/messages.proto`)
+      using the Protocol Buffers library.
+
+### How to Connect and Send a Request
+
+A client (sequencer) implementation must perform the following steps:
+
+1. **Establish Connection**: Open a standard TCP socket to the publisher's listen address (e.g., `localhost:8080`).
+
+2. **Construct Message**: Create an instance of the `XTRequest` message and populate it with the necessary transaction
+   data. Wrap this `XTRequest` inside the top-level `Message` object.
+
+3. **Serialize**: Use the Protobuf library for your language to serialize the `Message` object into a byte array.
+
+4. **Frame and Send**:
+   a. Get the length of the serialized byte array from the previous step.
+   b. Create a 4-byte buffer containing this length, encoded as a Big Endian `uint32`.
+   c. Write the 4-byte length header to the TCP socket.
+   d. Immediately after, write the serialized message byte array to the socket.
