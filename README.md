@@ -8,7 +8,7 @@ a simple message relay system between rollup sequencers.
 The system consists of three main components:
 
 ```
-┌─────────────┐    XTRequest     ┌─────────────────┐    broadcast    ┌─────────────┐
+┌─────────────┐    XTRequest     ┌─────────────────┐    broadcast     ┌─────────────┐
 │             │ ──────────────>  │     Shared      │ ──────────────>  │             │
 │ Sequencer A │                  │    Publisher    │                  │ Sequencer B │
 │             │                  │     (Hub)       │                  │             │
